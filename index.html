@@ -4,10 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WebCraft Services</title>
-<style>:root{color-scheme:light dark}body{margin:0;padding:0}img{max-width:100%}</style>
 </head>
 <body>
-
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Poppins:wght@500;600&display=swap');
 
@@ -988,7 +986,7 @@
 
 
   @media (max-width: 620px){
-    /* Keep the phone-sized stage at its previous, already-tuned height —
+    /* Keep the phone-sized stage at its previous, already-tuned height -
        the bigger desktop stage below is a desktop-only change. */
     .stage{
       height:min(520px, 62vh);
@@ -1518,7 +1516,7 @@
       if (frame) frame.style.transform = `scale(${SCALE}) translateY(${-px}px)`;
     };
     /* On mobile the iframe is scaled to fill the box's width, which makes
-       the rendered page taller than the box — fine for the landing screen
+       the rendered page taller than the box - fine for the landing screen
        (the important bits are all up top), but it crops the chat composer
        off the bottom. Panning up (cropping the header instead) keeps the
        composer on screen. On desktop the frame is instead scaled to fit
@@ -1537,10 +1535,12 @@
       if (el) { el.removeAttribute('hidden'); el.classList.add('demo-on'); }
     };
     const moveTo = (el, dx = 0, dy = 0) => {
-      if (!el) return;
+      if (!el || !frame) return;
       const r = el.getBoundingClientRect();
-      const x = (r.left + r.width / 2) * SCALE + dx;
-      const y = (r.top + r.height / 2 - panY) * SCALE + dy;
+      const offX = parseFloat(frame.style.left) || 0;
+      const offY = parseFloat(frame.style.top) || 0;
+      const x = offX + (r.left + r.width / 2) * SCALE + dx;
+      const y = offY + (r.top + r.height / 2 - panY) * SCALE + dy;
       cursor.style.transform = `translate(${x}px, ${y}px)`;
     };
     const tap = () => { ring.classList.remove('tap'); void ring.offsetWidth; ring.classList.add('tap'); };
@@ -1565,8 +1565,8 @@
       if (msgs) msgs.scrollTop = msgs.scrollHeight;
     }
 
-    /* Mirrors ui.js's real addChoices/addStartButton — same class names, same
-       markup shape — so the demo is built from the site's own components
+    /* Mirrors ui.js's real addChoices/addStartButton - same class names, same
+       markup shape - so the demo is built from the site's own components
        instead of a look-alike. */
     function addChoices(container, choices) {
       const row = doc.createElement('div');
@@ -1868,7 +1868,7 @@
       let desktop = false;
       if (wrap && wrap.clientWidth) {
         /* Desktop (>620px, matching our one CSS breakpoint) gets "contain"
-           scaling — shrink to fit the FULL page (480x760) inside the box
+           scaling - shrink to fit the FULL page (480x760) inside the box
            with no cropping, ever, even if that leaves a sliver of letterbox
            on the narrow axis. Mobile keeps the old "cover" scaling (fills
            the box width, taller than it, needs panning) untouched, since
