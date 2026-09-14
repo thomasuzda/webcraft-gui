@@ -1834,6 +1834,33 @@
       }, 900);
     }
 
+    /* Classic "cracking the password" decode effect: scrambled characters
+       that resolve into the real text left-to-right over a handful of
+       steps, instead of the line just appearing all at once. Scheduled
+       through the shared later() (not requestAnimationFrame) so it gets
+       cancelled along with everything else when the tab is switched away
+       from mid-animation. */
+    const SCRAMBLE = '!<>-_\\/[]{}=+*^?#01';
+    function decodeText(el, text) {
+      const steps = 9;
+      let scrambled = '';
+      for (let i = 0; i < text.length; i++) {
+        scrambled += text[i] === ' ' ? ' ' : SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];
+      }
+      el.textContent = scrambled;
+      for (let s = 1; s <= steps; s++) {
+        later(() => {
+          const revealCount = Math.round((s / steps) * text.length);
+          let out = '';
+          for (let i = 0; i < text.length; i++) {
+            if (i < revealCount || text[i] === ' ') out += text[i];
+            else out += SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)];
+          }
+          el.textContent = out;
+        }, s * 40);
+      }
+    }
+
     function addFeedItem(item) {
       const lines = feed.querySelector('.host-feed-lines');
       if (!lines) return;
@@ -1841,9 +1868,9 @@
       if (rows.length >= 4) rows[0].remove();
       const row = document.createElement('div');
       row.className = 'host-feed-item ' + item.type;
-      row.textContent = item.text;
       lines.appendChild(row);
       requestAnimationFrame(() => row.classList.add('show'));
+      decodeText(row, item.text);
     }
 
     function playHostingLoop() {
@@ -1862,8 +1889,8 @@
         if (uptime < 99.98) later(uptimeStep, 90);
       };
       later(uptimeStep, 200);
-      later(() => { speedEl.textContent = '38ms'; }, 900);
-      later(() => { nodesEl.textContent = String(nodes.length); }, 1100);
+      later(() => decodeText(speedEl, '38ms'), 900);
+      later(() => decodeText(nodesEl, String(nodes.length)), 1100);
 
       let t = 1300;
       points.forEach((_, i) => {
