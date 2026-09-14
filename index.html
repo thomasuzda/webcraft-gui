@@ -691,6 +691,11 @@
     background:rgba(255,255,255,0.05);
     overflow:hidden;
   }
+  .host-land{
+    position:absolute;
+    background:rgba(139,227,168,0.07);
+    border:1px solid rgba(139,227,168,0.1);
+  }
   .host-node{
     position:absolute;
     width:6px; height:6px;
@@ -1496,7 +1501,19 @@
     if (!map || !feed) return;
 
     const points = [[10,20],[28,55],[52,15],[70,60],[88,30],[46,75],[15,68],[80,80]];
-    map.innerHTML = points.map(([x,y]) => `<span class="host-node" style="left:${x}%;top:${y}%"></span>`).join('')
+    /* Loose continent-shaped blobs, not real geography - just enough so the
+       node dots read as "a world map" instead of floating on empty gray. */
+    const LAND = [
+      { left: '0%', top: '5%', width: '26%', height: '30%', rotate: -8, radius: '40% 60% 55% 45% / 55% 45% 60% 40%' },
+      { left: '9%', top: '46%', width: '18%', height: '40%', rotate: 6, radius: '60% 40% 50% 50% / 40% 60% 40% 60%' },
+      { left: '43%', top: '3%', width: '15%', height: '19%', rotate: -4, radius: '50%' },
+      { left: '51%', top: '20%', width: '23%', height: '44%', rotate: 2, radius: '45% 55% 50% 50% / 55% 45% 50% 50%' },
+      { left: '61%', top: '4%', width: '36%', height: '36%', rotate: -3, radius: '50% 50% 40% 60% / 45% 55% 45% 55%' },
+      { left: '73%', top: '65%', width: '20%', height: '20%', rotate: 4, radius: '50%' },
+    ];
+    const landHtml = LAND.map(l => `<span class="host-land" style="left:${l.left};top:${l.top};width:${l.width};height:${l.height};border-radius:${l.radius};transform:rotate(${l.rotate}deg)"></span>`).join('');
+    map.innerHTML = landHtml
+      + points.map(([x,y]) => `<span class="host-node" style="left:${x}%;top:${y}%"></span>`).join('')
       + '<span class="host-origin"></span>';
     const nodes = [...map.querySelectorAll('.host-node')];
 
