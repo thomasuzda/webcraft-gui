@@ -51,7 +51,6 @@
     background:
       radial-gradient(ellipse 95% 65% at 50% 0%, rgba(190,198,212,0.16), transparent 74%),
       radial-gradient(ellipse 66% 52% at 58% 2%, rgba(92,157,255,0.16), transparent 72%),
-      radial-gradient(ellipse 60% 45% at 20% 30%, rgba(201,139,240,0.08), transparent 70%),
       var(--black);
     animation:heroDrift 18s ease-in-out infinite;
     transform-origin:50% 0%;
@@ -69,7 +68,7 @@
   }
   .heading .eyebrow{
     font-family:'Source Sans 3', sans-serif;
-    font-size:1.35rem;
+    font-size:1.15rem;
     font-weight:700;
     text-transform:uppercase;
     letter-spacing:0.02em;
@@ -89,26 +88,18 @@
 
   .site-footer{
     display:flex;
-    flex-direction:column;
     align-items:center;
-    gap:8px;
-    margin-top:8px;
-    padding-top:22px;
+    justify-content:center;
+    gap:6px;
+    margin-top:4px;
+    padding-top:16px;
     border-top:1px solid rgba(255,255,255,0.1);
     width:min(480px, 90vw);
   }
-  .site-footer .eyebrow{
-    font-family:'Source Sans 3', sans-serif;
-    font-size:0.85rem;
-    font-weight:700;
-    text-transform:uppercase;
-    letter-spacing:0.02em;
-    color:#fff;
-  }
-  .site-footer .eyebrow b{ color:var(--accent); font-weight:700; }
-  .site-footer-copy{ font-size:0.72rem; color:var(--text-muted); }
+  .site-footer-copy{ font-size:0.7rem; color:var(--text-muted); }
+  .site-footer-copy::after{ content:'\00b7'; margin-left:6px; color:var(--text-muted); }
   .site-footer-link{
-    font-size:0.75rem;
+    font-size:0.7rem;
     font-weight:600;
     color:var(--accent);
     text-decoration:none;
@@ -1276,8 +1267,7 @@
 <h1 class="tagline">Everything your site needs, in one place</h1>
 
 <footer class="site-footer">
-  <span class="eyebrow">Web<b>craft</b></span>
-  <span class="site-footer-copy">&copy; 2025 WebCraft Studio. All rights reserved.</span>
+  <span class="site-footer-copy">&copy; 2025 WebCraft Studio</span>
   <a class="site-footer-link" href="#">Get in touch</a>
 </footer>
 
