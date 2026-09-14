@@ -388,7 +388,7 @@
     font-size:0.68rem;
     line-height:1.75;
     white-space:pre;
-    transition:transform 0.6s ease;
+    transition:transform 1.4s ease;
     color:#d4d4d8;
   }
   .code-lines .ln{ color:#4b4e5a; display:inline-block; width:20px; user-select:none; }
@@ -771,6 +771,12 @@
   .host-status .dot{ width:6px; height:6px; border-radius:50%; background:#8be3a8; box-shadow:0 0 0 3px rgba(139,227,168,0.25); }
   .host-lock{ font-size:0.6rem; color:rgba(255,255,255,0.6); display:flex; align-items:center; gap:4px; }
   .host-stats{ display:flex; gap:22px; margin-bottom:14px; }
+  .host-stat{
+    opacity:0;
+    transform:translateX(-26px);
+    transition:opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1.3, 0.36, 1);
+  }
+  .host-stat.show{ opacity:1; transform:none; }
   .host-stat .num{ font-family:'Fraunces', Georgia, serif; font-size:1.4rem; font-variant-numeric:tabular-nums; }
   .host-stat .lbl{ font-size:0.6rem; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.03em; }
   .host-body{ display:flex; gap:12px; flex:1; min-height:0; }
@@ -845,7 +851,11 @@
     color:rgba(255,255,255,0.55);
     text-transform:uppercase;
     letter-spacing:0.03em;
+    opacity:0;
+    transform:translateY(16px) scale(0.85);
+    transition:opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1.3, 0.36, 1);
   }
+  .host-stack-item.show{ opacity:1; transform:none; }
   .host-stack-item svg{ flex-shrink:0; }
   .host-feed{
     width:170px;
@@ -1619,9 +1629,49 @@
       ['44', '  &lt;/<span class="c2">div</span>&gt;'],
       ['45', '&lt;/<span class="c2">section</span>&gt;'],
       ['46', ''],
-      ['47', '&lt;<span class="c2">footer</span> <span class="c4">class</span>=<span class="c3">"site-footer"</span>&gt;'],
-      ['48', '  &lt;<span class="c2">p</span>&gt;<span class="plain">&amp;copy; 2025 WebCraft Studio</span>&lt;/<span class="c2">p</span>&gt;'],
-      ['49', '&lt;/<span class="c2">footer</span>&gt;'],
+      ['47', ''],
+      ['48', '&lt;<span class="c2">section</span> <span class="c4">id</span>=<span class="c3">"pricing"</span> <span class="c4">class</span>=<span class="c3">"pricing"</span>&gt;'],
+      ['49', '  &lt;<span class="c2">h2</span>&gt;<span class="plain">Simple, flat-rate pricing</span>&lt;/<span class="c2">h2</span>&gt;'],
+      ['50', '  &lt;<span class="c2">div</span> <span class="c4">class</span>=<span class="c3">"pricing-grid"</span>&gt;'],
+      ['51', '    &lt;<span class="c1">!--</span> <span class="c5">tier: starter</span> <span class="c1">--</span>&gt;'],
+      ['52', '    &lt;<span class="c2">article</span> <span class="c4">class</span>=<span class="c3">"price-card"</span> <span class="c4">data-tier</span>=<span class="c3">"starter"</span>&gt;'],
+      ['53', '      &lt;<span class="c2">h3</span>&gt;<span class="plain">Starter</span>&lt;/<span class="c2">h3</span>&gt;'],
+      ['54', '      &lt;<span class="c2">p</span> <span class="c4">class</span>=<span class="c3">"price"</span>&gt;<span class="plain">$49</span>&lt;<span class="c2">span</span>&gt;<span class="plain">/mo</span>&lt;/<span class="c2">span</span>&gt;&lt;/<span class="c2">p</span>&gt;'],
+      ['55', '      &lt;<span class="c2">ul</span>&gt;'],
+      ['56', '        &lt;<span class="c2">li</span>&gt;<span class="plain">5-page site</span>&lt;/<span class="c2">li</span>&gt;'],
+      ['57', '        &lt;<span class="c2">li</span>&gt;<span class="plain">Basic SEO setup</span>&lt;/<span class="c2">li</span>&gt;'],
+      ['58', '      &lt;/<span class="c2">ul</span>&gt;'],
+      ['59', '    &lt;/<span class="c2">article</span>&gt;'],
+      ['60', '    &lt;<span class="c2">article</span> <span class="c4">class</span>=<span class="c3">"price-card featured"</span> <span class="c4">data-tier</span>=<span class="c3">"growth"</span>&gt;'],
+      ['61', '      &lt;<span class="c2">h3</span>&gt;<span class="plain">Growth</span>&lt;/<span class="c2">h3</span>&gt;'],
+      ['62', '      &lt;<span class="c2">p</span> <span class="c4">class</span>=<span class="c3">"price"</span>&gt;<span class="plain">$149</span>&lt;<span class="c2">span</span>&gt;<span class="plain">/mo</span>&lt;/<span class="c2">span</span>&gt;&lt;/<span class="c2">p</span>&gt;'],
+      ['63', '      &lt;<span class="c2">ul</span>&gt;'],
+      ['64', '        &lt;<span class="c2">li</span>&gt;<span class="plain">Unlimited pages</span>&lt;/<span class="c2">li</span>&gt;'],
+      ['65', '        &lt;<span class="c2">li</span>&gt;<span class="plain">Full SEO + hosting</span>&lt;/<span class="c2">li</span>&gt;'],
+      ['66', '        &lt;<span class="c2">li</span>&gt;<span class="plain">Priority support</span>&lt;/<span class="c2">li</span>&gt;'],
+      ['67', '      &lt;/<span class="c2">ul</span>&gt;'],
+      ['68', '    &lt;/<span class="c2">article</span>&gt;'],
+      ['69', '  &lt;/<span class="c2">div</span>&gt;'],
+      ['70', '&lt;/<span class="c2">section</span>&gt;'],
+      ['71', ''],
+      ['72', '&lt;<span class="c2">footer</span> <span class="c4">class</span>=<span class="c3">"site-footer"</span>&gt;'],
+      ['73', '  &lt;<span class="c2">p</span>&gt;<span class="plain">&amp;copy; 2025 WebCraft Studio</span>&lt;/<span class="c2">p</span>&gt;'],
+      ['74', '&lt;/<span class="c2">footer</span>&gt;'],
+      ['75', ''],
+      ['76', '&lt;<span class="c2">script</span>&gt;'],
+      ['77', '  <span class="c1">const</span> <span class="plain">nav</span> = <span class="plain">document</span>.<span class="c6">querySelector</span>(<span class="c3">\'.nav-links\'</span>);'],
+      ['78', '  <span class="c1">const</span> <span class="plain">cards</span> = <span class="plain">document</span>.<span class="c6">querySelectorAll</span>(<span class="c3">\'.price-card\'</span>);'],
+      ['79', ''],
+      ['80', '  <span class="c1">function</span> <span class="c6">highlightFeatured</span>() {'],
+      ['81', '    <span class="plain">cards</span>.<span class="c6">forEach</span>((<span class="plain">card</span>) =&gt; {'],
+      ['82', '      <span class="c1">if</span> (<span class="plain">card</span>.<span class="plain">dataset</span>.<span class="plain">tier</span> === <span class="c3">\'growth\'</span>) {'],
+      ['83', '        <span class="plain">card</span>.<span class="plain">classList</span>.<span class="c6">add</span>(<span class="c3">\'featured\'</span>);'],
+      ['84', '      }'],
+      ['85', '    });'],
+      ['86', '  }'],
+      ['87', ''],
+      ['88', '  <span class="plain">window</span>.<span class="c6">addEventListener</span>(<span class="c3">\'DOMContentLoaded\'</span>, <span class="c6">highlightFeatured</span>);'],
+      ['89', '&lt;/<span class="c2">script</span>&gt;'],
     ];
     const contactCode = [
       ['1', '&lt;<span class="c2">form</span> <span class="c4">id</span>=<span class="c3">"contact-form"</span> <span class="c4">novalidate</span>&gt;'],
@@ -1689,24 +1739,28 @@
       }, 700);
     }, 1100);
 
-    /* index.html is long enough to need real scrolling - scroll down
-       through it in a couple of steps, pause to "read", then scroll
-       back to the top before closing the file. */
-    later(() => { codeLinesEl.style.transform = 'translateY(-190px)'; }, 3200);
-    later(() => { codeLinesEl.style.transform = 'translateY(-400px)'; }, 4700);
-    later(() => { codeLinesEl.style.transform = 'translateY(0)'; }, 6200);
+    /* index.html is 89 lines - long enough to actually need scrolling.
+       Scroll down through it in slow, deliberate steps (matching the
+       slower 1.4s transition on .code-lines) so it reads as "in-depth
+       code", pause between each to "read", then scroll back to the top
+       before closing the file. */
+    later(() => { codeLinesEl.style.transform = 'translateY(-260px)'; }, 3400);
+    later(() => { codeLinesEl.style.transform = 'translateY(-560px)'; }, 5900);
+    later(() => { codeLinesEl.style.transform = 'translateY(-880px)'; }, 8400);
+    later(() => { codeLinesEl.style.transform = 'translateY(-1180px)'; }, 10900);
+    later(() => { codeLinesEl.style.transform = 'translateY(0)'; }, 13400);
 
-    later(() => moveTo(backBtn), 7300);
+    later(() => moveTo(backBtn), 15200);
     later(() => {
       tap();
       codeView.classList.remove('show');
       listView.classList.add('show');
       const row = filesEl.querySelector('[data-i="6"]');
       if (row) row.classList.remove('active');
-    }, 8000);
+    }, 15900);
 
-    later(() => { cursor.style.opacity = '0'; }, 8700);
-    later(mountSoftware, 10100);
+    later(() => { cursor.style.opacity = '0'; }, 16600);
+    later(mountSoftware, 18000);
   }
 
   function statusBar() {
@@ -1780,6 +1834,8 @@
     const nodesEl = document.getElementById('hostNodes');
     const map = document.getElementById('hostMap');
     const feed = document.getElementById('hostFeed');
+    const statEls = [...document.querySelectorAll('.host-stat')];
+    const stackEls = [...document.querySelectorAll('.host-stack-item')];
     if (!map || !feed) return;
 
     const points = [[10,20],[28,55],[52,15],[70,60],[88,30],[46,75],[15,68],[80,80]];
@@ -1885,6 +1941,13 @@
       uptimeEl.textContent = '0%';
       speedEl.textContent = String.fromCharCode(8212);
       nodesEl.textContent = '0';
+
+      /* Fly the stat blocks and stack icons in fresh on every loop, not
+         just the first mount, so it never just sits there static. */
+      statEls.forEach(el => el.classList.remove('show'));
+      stackEls.forEach(el => el.classList.remove('show'));
+      statEls.forEach((el, i) => later(() => el.classList.add('show'), 150 + i * 110));
+      stackEls.forEach((el, i) => later(() => el.classList.add('show'), 550 + i * 90));
 
       let uptime = 0;
       const uptimeStep = () => {
@@ -2016,7 +2079,7 @@
        the highlight needs to track vertical position too, not just
        slide left/right - otherwise it's stuck on row 1 when the active
        tab wraps to row 2. */
-    tabHighlight.style.transform = `translate(${btn.offsetLeft - 5}px, ${btn.offsetTop - 5}px)`;
+    tabHighlight.style.transform = `translate(${btn.offsetLeft}px, ${btn.offsetTop}px)`;
     tabHighlight.style.width = btn.offsetWidth + 'px';
     tabHighlight.style.height = btn.offsetHeight + 'px';
   }
@@ -2153,10 +2216,10 @@
     }
 
     function pickChoice(row, container, label, delay, cb) {
-      runLater(() => {
+      later(() => {
         const btn = [...row.querySelectorAll('button')].find(b => b.textContent === label);
         moveTo(btn);
-        runLater(() => {
+        later(() => {
           tap();
           row.remove();
           const echo = doc.createElement('p');
@@ -2164,7 +2227,7 @@
           echo.textContent = '\u2192 ' + label;
           container.appendChild(echo);
           scrollChatDown();
-          if (cb) runLater(cb, 900);
+          if (cb) later(cb, 900);
         }, 1100);
       }, delay);
     }
@@ -2259,9 +2322,9 @@
       const cardTop = card.getBoundingClientRect().top + target.scrollTop;
       const toY = Math.max(0, cardTop - target.clientHeight / 2 + card.clientHeight / 2);
       autoScroll(target, toY, 1500, () => {
-        runLater(() => {
+        later(() => {
           moveTo(btn);
-          runLater(() => {
+          later(() => {
             tap();
             card.querySelectorAll('.answer').forEach(b => {
               b.classList.toggle('is-chosen', Number(b.dataset.option) === item.correct);
@@ -2278,7 +2341,7 @@
             card.classList.add('is-revealed');
             const fill = doc.getElementById('progress-fill');
             if (fill) fill.style.width = Math.round(((i + 1) / QUIZ_DATA.length) * 100) + '%';
-            runLater(cb, 1300);
+            later(cb, 1300);
           }, 650);
         }, 300);
       });
@@ -2327,7 +2390,7 @@
       const input = doc.getElementById('chat-input');
       if (!input) return;
       QUESTION.split('').forEach((ch, i) => {
-        runLater(() => { input.value = QUESTION.slice(0, i + 1); }, i * 70);
+        later(() => { input.value = QUESTION.slice(0, i + 1); }, i * 70);
       });
     }, 6500);
 
@@ -2342,7 +2405,7 @@
     }, typedDone + 1100);
 
     function askDifficulty() {
-      runLater(() => {
+      later(() => {
         const bubble = addMessage('assistant', 'Building a quiz on that. How hard should it be?');
         const row = addChoices(bubble, [
           { label: 'Easy \u2014 mostly recall' },
@@ -2382,15 +2445,15 @@
 
     function writingQuiz() {
       addMessage('assistant', 'Writing your quiz...');
-      runLater(showReadyCard, 2000);
+      later(showReadyCard, 2000);
     }
 
     function showReadyCard() {
       const box = doc.getElementById('chat-messages');
       const { card, start } = addReadyCard(box, 6);
-      runLater(() => {
+      later(() => {
         moveTo(start);
-        runLater(() => {
+        later(() => {
           tap();
           card.remove();
           const ask = doc.createElement('p');
@@ -2407,7 +2470,7 @@
     }
 
     function showQuiz() {
-      runLater(() => {
+      later(() => {
         buildQuiz();
         show('screen-quiz');
         panFrame(0);
@@ -2415,13 +2478,13 @@
         if (fill) fill.style.width = '0%';
       }, 400);
 
-      runLater(() => {
+      later(() => {
         answerAllQuestions(doc, 0, () => {
           const target = (doc.scrollingElement || doc.documentElement || doc.body);
           autoScroll(target, 0, 1800, () => {
             cursor.style.opacity = '0';
-            runLater(() => { cursor.style.transform = `translate(${startOffX + 230}px, ${startOffY + 180}px)`; }, 200);
-            runLater(() => runDemo(doc, desktop), 2200);
+            later(() => { cursor.style.transform = `translate(${startOffX + 230}px, ${startOffY + 180}px)`; }, 200);
+            later(() => runDemo(doc, desktop), 2200);
           });
         });
       }, 1700);
