@@ -1505,7 +1505,7 @@
   function later(fn, ms) { demoTimers.push(setTimeout(fn, ms)); }
   function stopDemo() { demoTimers.forEach(clearTimeout); demoTimers = []; }
 
-  function runDemo(doc) {
+  function runDemo(doc, desktop) {
     const cursor = document.getElementById('demoCursor');
     const ring = document.getElementById('demoRing');
     const frame = document.getElementById('siteFrame');
@@ -1517,13 +1517,15 @@
       panY = px;
       if (frame) frame.style.transform = `scale(${SCALE}) translateY(${-px}px)`;
     };
-    /* The iframe is scaled up to fill the box's width, which makes the
-       rendered page taller than the box — fine for the landing screen (the
-       important bits are all up top), but it crops the chat composer off
-       the bottom. Panning the iframe up (cropping the header instead) keeps
-       the composer on screen without shrinking the page to fit. */
+    /* On mobile the iframe is scaled to fill the box's width, which makes
+       the rendered page taller than the box — fine for the landing screen
+       (the important bits are all up top), but it crops the chat composer
+       off the bottom. Panning up (cropping the header instead) keeps the
+       composer on screen. On desktop the frame is instead scaled to fit
+       the WHOLE page inside the box (see mountSite), so nothing is ever
+       cropped and no panning is needed or wanted. */
     const panToReveal = (el) => {
-      if (!el || !wrap) return;
+      if (desktop || !el || !wrap) return;
       const visibleH = wrap.clientHeight / SCALE;
       const bottom = el.getBoundingClientRect().bottom;
       panFrame(Math.max(0, bottom - visibleH));
@@ -1848,7 +1850,7 @@
           autoScroll(target, 0, 1800, () => {
             cursor.style.opacity = '0';
             later(() => { cursor.style.transform = 'translate(230px, 180px)'; }, 200);
-            later(() => runDemo(doc), 2200);
+            later(() => runDemo(doc, desktop), 2200);
           });
         });
       }, 1700);
@@ -1863,8 +1865,24 @@
       const doc = f.contentDocument;
       if (!doc) return;
       const wrap = document.querySelector('.site-frame-wrap');
+      let desktop = false;
       if (wrap && wrap.clientWidth) {
-        SCALE = wrap.clientWidth / 480;
+        /* Desktop (>620px, matching our one CSS breakpoint) gets "contain"
+           scaling — shrink to fit the FULL page (480x760) inside the box
+           with no cropping, ever, even if that leaves a sliver of letterbox
+           on the narrow axis. Mobile keeps the old "cover" scaling (fills
+           the box width, taller than it, needs panning) untouched, since
+           it's already tuned and the user asked not to touch it. */
+        desktop = wrap.clientWidth > 620;
+        if (desktop) {
+          SCALE = Math.min(wrap.clientWidth / 480, wrap.clientHeight / 760);
+          f.style.left = Math.round((wrap.clientWidth - 480 * SCALE) / 2) + 'px';
+          f.style.top = Math.round((wrap.clientHeight - 760 * SCALE) / 2) + 'px';
+        } else {
+          SCALE = wrap.clientWidth / 480;
+          f.style.left = '0px';
+          f.style.top = '0px';
+        }
         f.style.transform = `scale(${SCALE})`;
       }
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -1873,7 +1891,7 @@
         if (landing) landing.classList.add('demo-on');
         return;
       }
-      runDemo(doc);
+      runDemo(doc, desktop);
     }, { once: true });
     f.srcdoc = decodeURIComponent(escape(atob(document.getElementById("siteDoc").textContent.trim())));
   }
