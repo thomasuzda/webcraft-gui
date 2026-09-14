@@ -1516,7 +1516,13 @@
        wide box - then we zoom the whole thing out to fit. */
     const w = DESKTOP_SITE_WIDTH;
     if (frame.style.width !== w + 'px') frame.style.width = w + 'px';
-    const h = Math.max(doc.body.scrollHeight, 400);
+    /* Capped at 900 - the iframe's own fixed viewport height (see
+       .site-frame's CSS height below). The landing and chat screens both
+       fit inside that naturally; the quiz screen is a long question list
+       that scrolls the real page past 900px, same as any normal webpage -
+       it should scroll into view question by question, not get zoomed out
+       to cram all 30 questions into the box at once. */
+    const h = Math.min(Math.max(doc.body.scrollHeight, 400), 900);
     SCALE = Math.min(wrap.clientWidth / w, wrap.clientHeight / h);
     frame.style.left = Math.round((wrap.clientWidth - w * SCALE) / 2) + 'px';
     frame.style.top = Math.round((wrap.clientHeight - h * SCALE) / 2) + 'px';
