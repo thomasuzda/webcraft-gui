@@ -283,7 +283,26 @@
     padding:3px 9px;
     font-size:0.66rem; color:#c9d1d9;
   }
-  .gh-filetable{ flex:1; min-height:0; overflow:hidden; }
+  #ghList{ overflow-y:auto; }
+  .gh-nav-tabs{
+    display:flex; align-items:center; gap:16px;
+    padding:0 12px;
+    border-bottom:1px solid #21262d;
+    flex-shrink:0;
+  }
+  .gh-nav-tab{
+    display:flex; align-items:center; gap:6px;
+    padding:9px 2px;
+    font-size:0.68rem; color:#8b949e; font-weight:600;
+    border-bottom:2px solid transparent;
+  }
+  .gh-nav-tab.active{ color:#c9d1d9; border-bottom-color:#f78166; }
+  .gh-nav-count{
+    background:#21262d; color:#8b949e;
+    font-size:0.6rem; font-weight:700;
+    border-radius:100px; padding:1px 6px;
+  }
+  .gh-filetable{ flex-shrink:0; overflow:hidden; }
   .gh-file-row{
     display:flex; align-items:center; gap:9px;
     padding:6.5px 12px;
@@ -295,6 +314,33 @@
   .gh-file-name{ color:#c9d1d9; font-size:0.72rem; width:98px; flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .gh-file-msg{ color:#8b949e; font-size:0.68rem; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .gh-file-time{ color:#8b949e; font-size:0.64rem; flex-shrink:0; }
+  .gh-readme{
+    flex-shrink:0;
+    margin:16px 12px 12px;
+    border:1px solid #21262d;
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .gh-readme-head{
+    display:flex; align-items:center; gap:6px;
+    padding:8px 12px;
+    background:#161b22;
+    border-bottom:1px solid #21262d;
+    font-size:0.68rem; color:#c9d1d9; font-weight:600;
+  }
+  .gh-readme-body{ padding:14px 16px; font-size:0.7rem; line-height:1.6; color:#c9d1d9; }
+  .gh-readme-body h1{ font-size:1rem; margin:0 0 8px; color:#e6edf3; border-bottom:1px solid #21262d; padding-bottom:8px; }
+  .gh-readme-body h2{ font-size:0.82rem; margin:14px 0 6px; color:#e6edf3; }
+  .gh-readme-body p{ margin:0 0 8px; color:#8b949e; }
+  .gh-readme-body ul{ margin:0 0 10px; padding-left:18px; color:#8b949e; }
+  .gh-readme-body li{ margin-bottom:3px; }
+  .gh-readme-body code{ background:#161b22; border-radius:4px; padding:1px 5px; font-family:'IBM Plex Mono', monospace; font-size:0.9em; color:#e6edf3; }
+  .gh-readme-body b{ color:#c9d1d9; }
+  .gh-readme-body pre{
+    background:#161b22; border:1px solid #21262d; border-radius:6px;
+    padding:9px 12px; margin:0;
+    font-family:'IBM Plex Mono', monospace; font-size:0.68rem; line-height:1.6; color:#8b949e;
+  }
   .gh-code-bar{
     display:flex; align-items:center; gap:8px;
     padding:9px 12px;
@@ -759,34 +805,74 @@
     transition:left 0.9s ease, top 0.9s ease, opacity 0.25s ease;
     pointer-events:none;
   }
+  .host-stack{
+    display:flex;
+    gap:18px;
+    margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .host-stack-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    font-size:0.58rem;
+    color:rgba(255,255,255,0.55);
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+  }
+  .host-stack-item svg{ flex-shrink:0; }
   .host-feed{
-    width:150px;
+    width:170px;
     flex-shrink:0;
     display:flex;
     flex-direction:column;
-    justify-content:flex-end;
-    gap:9px;
+    background:#050605;
+    border:1px solid rgba(139,227,168,0.25);
+    border-radius:8px;
     overflow:hidden;
   }
-  .host-feed-item{
-    display:flex;
-    gap:6px;
-    opacity:0;
-    transform:translateY(6px);
-    transition:opacity 0.3s ease, transform 0.3s ease;
-  }
-  .host-feed-item.show{ opacity:1; transform:none; }
-  .host-feed-dot{
-    width:6px; height:6px;
-    border-radius:50%;
-    margin-top:3px;
+  .host-feed-head{
+    display:flex; align-items:center; gap:5px;
+    padding:6px 8px;
+    background:#0a0d0a;
+    border-bottom:1px solid rgba(139,227,168,0.2);
     flex-shrink:0;
   }
-  .host-feed-item.deploy .host-feed-dot{ background:#8be3a8; }
-  .host-feed-item.ssl .host-feed-dot{ background:#7fb2ff; }
-  .host-feed-item.node .host-feed-dot{ background:#d9a8ff; }
-  .host-feed-text{ font-size:0.63rem; line-height:1.35; color:rgba(255,255,255,0.9); }
-  .host-feed-time{ display:block; font-size:0.56rem; color:rgba(255,255,255,0.4); margin-top:1px; }
+  .host-feed-head span{ width:5px; height:5px; border-radius:50%; background:rgba(139,227,168,0.35); }
+  .host-feed-head b{ font-family:'IBM Plex Mono', monospace; font-size:0.52rem; color:rgba(139,227,168,0.6); font-weight:500; margin-left:2px; }
+  .host-feed-lines{
+    flex:1;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    gap:5px;
+    padding:8px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .host-feed-item{
+    opacity:0;
+    transform:translateY(4px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+    font-size:0.56rem;
+    line-height:1.5;
+    color:#3ddc74;
+    text-shadow:0 0 6px rgba(61,220,116,0.35);
+  }
+  .host-feed-item.show{ opacity:1; transform:none; }
+  .host-feed-item.ssl{ color:#7ee8a8; }
+  .host-feed-item.node{ color:#5ff0a0; }
+  .host-feed-time{ display:block; color:rgba(61,220,116,0.4); font-size:0.5rem; }
+  .host-feed-caret{
+    display:inline-block; width:5px; height:9px;
+    background:#3ddc74;
+    margin-left:1px;
+    animation:hostCaret 1s step-end infinite;
+    vertical-align:-1px;
+  }
+  @keyframes hostCaret{ 50%{ opacity:0; } }
 
   /* ---- Support: AI chat + call ---- */
   .support-panel{
@@ -1162,7 +1248,42 @@
                   main
                 </span>
               </div>
+              <div class="gh-nav-tabs">
+                <span class="gh-nav-tab active">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M4.72 3.22a.75.75 0 011.06 1.06L2.06 8l3.72 3.72a.75.75 0 11-1.06 1.06L.47 8.53a.75.75 0 010-1.06l4.25-4.25zm6.56 0a.75.75 0 10-1.06 1.06L13.94 8l-3.72 3.72a.75.75 0 101.06 1.06l4.25-4.25a.75.75 0 000-1.06l-4.25-4.25z"/></svg>
+                  Code
+                </span>
+                <span class="gh-nav-tab">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/><path fill-rule="evenodd" d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"/></svg>
+                  Issues <span class="gh-nav-count">3</span>
+                </span>
+                <span class="gh-nav-tab">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M1.5 3.25a2.25 2.25 0 113 2.122v5.256a2.251 2.251 0 11-1.5 0V5.372A2.25 2.25 0 011.5 3.25zm5.677-.177L9.573.677A.25.25 0 0110 .854V2.5h1A2.5 2.5 0 0113.5 5v5.628a2.251 2.251 0 11-1.5 0V5a1 1 0 00-1-1h-1v1.646a.25.25 0 01-.427.177L7.177 3.427a.25.25 0 010-.354z"/></svg>
+                  Pull requests <span class="gh-nav-count">1</span>
+                </span>
+                <span class="gh-nav-tab">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5A1.5 1.5 0 012.5 1h11A1.5 1.5 0 0115 2.5v11a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 011 13.5v-11zM2.5 2a.5.5 0 00-.5.5V4h12V2.5a.5.5 0 00-.5-.5h-11zM14 5.5H2v8a.5.5 0 00.5.5h11a.5.5 0 00.5-.5v-8z"/></svg>
+                  Actions
+                </span>
+              </div>
               <div class="gh-filetable" id="ghFiles"></div>
+              <div class="gh-readme">
+                <div class="gh-readme-head">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="#8b949e"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0113.25 16h-9.5A1.75 1.75 0 012 14.25V1.75z"/></svg>
+                  README.md
+                </div>
+                <div class="gh-readme-body">
+                  <h1>WebCraft Studio &mdash; site</h1>
+                  <p>The marketing site for WebCraft Studio: design, SEO, hosting, and support, all in one build.</p>
+                  <h2>Getting started</h2>
+                  <ul>
+                    <li>Clone the repo and open <code>index.html</code></li>
+                    <li>Edit content in <code>/css</code> and <code>/js</code></li>
+                    <li>Push to <b>main</b> to deploy</li>
+                  </ul>
+                  <pre>npm install<br>npm run dev</pre>
+                </div>
+              </div>
             </div>
             <div class="gh-view" id="ghCode">
               <div class="gh-code-bar">
@@ -1352,6 +1473,24 @@
             <div class="host-stat"><div class="num" id="hostSpeed">&mdash;</div><div class="lbl">Response</div></div>
             <div class="host-stat"><div class="num" id="hostNodes">0</div><div class="lbl">CDN nodes</div></div>
           </div>
+          <div class="host-stack">
+            <div class="host-stack-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8be3a8" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h.01M9 15h.01" stroke-linecap="round"/><path d="M13 9h4M13 15h4" stroke-linecap="round"/></svg>
+              <span>Compute</span>
+            </div>
+            <div class="host-stack-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8be3a8" stroke-width="1.6"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5V18a7 2.5 0 0014 0V5.5" /><path d="M5 11.5a7 2.5 0 0014 0" /></svg>
+              <span>Database</span>
+            </div>
+            <div class="host-stack-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8be3a8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15c0-4 3-10 8-10s8 6 8 10"/><path d="M2.5 15h19a2.5 2.5 0 010 5h-19a2.5 2.5 0 010-5z"/></svg>
+              <span>Network</span>
+            </div>
+            <div class="host-stack-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8be3a8" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V5l7-3z"/></svg>
+              <span>Security</span>
+            </div>
+          </div>
           <div class="host-body">
             <div class="host-map" id="hostMap"></div>
             <div class="host-feed" id="hostFeed"></div>
@@ -1406,6 +1545,60 @@
       ['9', '  &lt;/<span class="c2">div</span>&gt;'],
       ['10', '&lt;/<span class="c2">header</span>&gt;'],
     ];
+    /* The auto-opened file for the demo - long enough that it actually
+       needs to scroll, instead of a 10-line snippet that fits in one
+       screen with nothing to show off. */
+    const longIndexCode = [
+      ['1', '&lt;<span class="c1">!--</span> <span class="c5">index.html - marketing homepage</span> <span class="c1">--</span>&gt;'],
+      ['2', '&lt;<span class="c2">header</span> <span class="c4">class</span>=<span class="c3">"site-header"</span>&gt;'],
+      ['3', '  &lt;<span class="c2">div</span> <span class="c4">class</span>=<span class="c3">"nav-wrap"</span>&gt;'],
+      ['4', '    &lt;<span class="c2">a</span> <span class="c4">class</span>=<span class="c3">"brand"</span> <span class="c4">href</span>=<span class="c3">"index.html"</span>&gt;'],
+      ['5', '      &lt;<span class="c2">span</span> <span class="c4">class</span>=<span class="c3">"brand-text"</span>&gt;<span class="plain">Web</span>&lt;<span class="c2">span</span>&gt;<span class="plain">craft</span>&lt;/<span class="c2">span</span>&gt;&lt;/<span class="c2">span</span>&gt;'],
+      ['6', '    &lt;/<span class="c2">a</span>&gt;'],
+      ['7', '    &lt;<span class="c2">nav</span> <span class="c4">class</span>=<span class="c3">"nav-links"</span>&gt;'],
+      ['8', '      &lt;<span class="c2">a</span> <span class="c4">href</span>=<span class="c3">"#work"</span>&gt;<span class="plain">Work</span>&lt;/<span class="c2">a</span>&gt;'],
+      ['9', '      &lt;<span class="c2">a</span> <span class="c4">href</span>=<span class="c3">"#services"</span>&gt;<span class="plain">Services</span>&lt;/<span class="c2">a</span>&gt;'],
+      ['10', '      &lt;<span class="c2">a</span> <span class="c4">href</span>=<span class="c3">"#pricing"</span>&gt;<span class="plain">Pricing</span>&lt;/<span class="c2">a</span>&gt;'],
+      ['11', '    &lt;/<span class="c2">nav</span>&gt;'],
+      ['12', '    &lt;<span class="c2">div</span> <span class="c4">class</span>=<span class="c3">"nav-cta"</span>&gt;'],
+      ['13', '      &lt;<span class="c2">a</span> <span class="c4">class</span>=<span class="c3">"btn btn-primary"</span> <span class="c4">href</span>=<span class="c3">"contact.html"</span>&gt;<span class="plain">Get a Quote</span>&lt;/<span class="c2">a</span>&gt;'],
+      ['14', '    &lt;/<span class="c2">div</span>&gt;'],
+      ['15', '  &lt;/<span class="c2">div</span>&gt;'],
+      ['16', '&lt;/<span class="c2">header</span>&gt;'],
+      ['17', ''],
+      ['18', '&lt;<span class="c2">section</span> <span class="c4">class</span>=<span class="c3">"hero"</span>&gt;'],
+      ['19', '  &lt;<span class="c2">div</span> <span class="c4">class</span>=<span class="c3">"hero-flow"</span> <span class="c4">aria-hidden</span>=<span class="c3">"true"</span>&gt;&lt;/<span class="c2">div</span>&gt;'],
+      ['20', '  &lt;<span class="c2">h1</span> <span class="c4">class</span>=<span class="c3">"hero-title"</span>&gt;'],
+      ['21', '    <span class="plain">Websites that actually</span>'],
+      ['22', '    &lt;<span class="c2">span</span> <span class="c4">class</span>=<span class="c3">"accent"</span>&gt;<span class="plain">convert</span>&lt;/<span class="c2">span</span>&gt;'],
+      ['23', '  &lt;/<span class="c2">h1</span>&gt;'],
+      ['24', '  &lt;<span class="c2">p</span> <span class="c4">class</span>=<span class="c3">"hero-sub"</span>&gt;'],
+      ['25', '    <span class="plain">Design, build, and host - all under one roof.</span>'],
+      ['26', '  &lt;/<span class="c2">p</span>&gt;'],
+      ['27', '&lt;/<span class="c2">section</span>&gt;'],
+      ['28', ''],
+      ['29', '&lt;<span class="c2">section</span> <span class="c4">id</span>=<span class="c3">"services"</span> <span class="c4">class</span>=<span class="c3">"services"</span>&gt;'],
+      ['30', '  &lt;<span class="c2">div</span> <span class="c4">class</span>=<span class="c3">"service-grid"</span>&gt;'],
+      ['31', '    &lt;<span class="c1">!--</span> <span class="c5">repeat for each service card</span> <span class="c1">--</span>&gt;'],
+      ['32', '    &lt;<span class="c2">article</span> <span class="c4">class</span>=<span class="c3">"service-card"</span>&gt;'],
+      ['33', '      &lt;<span class="c2">h3</span>&gt;<span class="plain">Website Design</span>&lt;/<span class="c2">h3</span>&gt;'],
+      ['34', '      &lt;<span class="c2">p</span>&gt;<span class="plain">Custom, responsive, built to convert.</span>&lt;/<span class="c2">p</span>&gt;'],
+      ['35', '    &lt;/<span class="c2">article</span>&gt;'],
+      ['36', '    &lt;<span class="c2">article</span> <span class="c4">class</span>=<span class="c3">"service-card"</span>&gt;'],
+      ['37', '      &lt;<span class="c2">h3</span>&gt;<span class="plain">SEO</span>&lt;/<span class="c2">h3</span>&gt;'],
+      ['38', '      &lt;<span class="c2">p</span>&gt;<span class="plain">Show up where customers are searching.</span>&lt;/<span class="c2">p</span>&gt;'],
+      ['39', '    &lt;/<span class="c2">article</span>&gt;'],
+      ['40', '    &lt;<span class="c2">article</span> <span class="c4">class</span>=<span class="c3">"service-card"</span>&gt;'],
+      ['41', '      &lt;<span class="c2">h3</span>&gt;<span class="plain">Hosting</span>&lt;/<span class="c2">h3</span>&gt;'],
+      ['42', '      &lt;<span class="c2">p</span>&gt;<span class="plain">99.98% uptime, global CDN included.</span>&lt;/<span class="c2">p</span>&gt;'],
+      ['43', '    &lt;/<span class="c2">article</span>&gt;'],
+      ['44', '  &lt;/<span class="c2">div</span>&gt;'],
+      ['45', '&lt;/<span class="c2">section</span>&gt;'],
+      ['46', ''],
+      ['47', '&lt;<span class="c2">footer</span> <span class="c4">class</span>=<span class="c3">"site-footer"</span>&gt;'],
+      ['48', '  &lt;<span class="c2">p</span>&gt;<span class="plain">&amp;copy; 2025 WebCraft Studio</span>&lt;/<span class="c2">p</span>&gt;'],
+      ['49', '&lt;/<span class="c2">footer</span>&gt;'],
+    ];
     const contactCode = [
       ['1', '&lt;<span class="c2">form</span> <span class="c4">id</span>=<span class="c3">"contact-form"</span> <span class="c4">novalidate</span>&gt;'],
       ['2', '  &lt;<span class="c2">label</span> <span class="c4">for</span>=<span class="c3">"email"</span>&gt;<span class="plain">Email</span>&lt;/<span class="c2">label</span>&gt;'],
@@ -1422,7 +1615,7 @@
       { type: 'folder', name: 'models', msg: 'Add mustang.glb', time: '1 month ago' },
       { type: 'file', name: 'about.html', msg: 'Update team section', time: '3 days ago' },
       { type: 'file', name: 'contact.html', msg: 'Wire up contact form', time: '1 week ago', code: contactCode },
-      { type: 'file', name: 'index.html', msg: 'Ship the new hero', time: '2 days ago', code: indexCode },
+      { type: 'file', name: 'index.html', msg: 'Ship the new hero', time: '2 days ago', code: longIndexCode },
       { type: 'file', name: 'services.html', msg: 'Add pricing cards', time: '4 days ago' },
       { type: 'file', name: 'README.md', msg: 'Update setup instructions', time: '2 weeks ago' },
     ];
@@ -1453,8 +1646,12 @@
       later(() => {
         listView.classList.remove('show');
         breadcrumbFile.textContent = file.name;
+        codeLinesEl.style.transition = 'none';
+        codeLinesEl.style.transform = 'translateY(0)';
         codeLinesEl.innerHTML = (file.code || indexCode).map(([n, code]) => `<span class="ln">${n}</span>${code}`).join('\n');
         codeView.classList.add('show');
+        void codeLinesEl.offsetWidth;
+        codeLinesEl.style.transition = '';
       }, 350);
     }
 
@@ -1468,17 +1665,24 @@
       }, 700);
     }, 1100);
 
-    later(() => moveTo(backBtn), 5200);
+    /* index.html is long enough to need real scrolling - scroll down
+       through it in a couple of steps, pause to "read", then scroll
+       back to the top before closing the file. */
+    later(() => { codeLinesEl.style.transform = 'translateY(-190px)'; }, 3200);
+    later(() => { codeLinesEl.style.transform = 'translateY(-400px)'; }, 4700);
+    later(() => { codeLinesEl.style.transform = 'translateY(0)'; }, 6200);
+
+    later(() => moveTo(backBtn), 7300);
     later(() => {
       tap();
       codeView.classList.remove('show');
       listView.classList.add('show');
       const row = filesEl.querySelector('[data-i="6"]');
       if (row) row.classList.remove('active');
-    }, 5900);
+    }, 8000);
 
-    later(() => { cursor.style.opacity = '0'; }, 6600);
-    later(mountSoftware, 8000);
+    later(() => { cursor.style.opacity = '0'; }, 8700);
+    later(mountSoftware, 10100);
   }
 
   function statusBar() {
@@ -1585,12 +1789,12 @@
     const nodes = [...map.querySelectorAll('.host-node')];
 
     const ACTIVITY = [
-      { type: 'deploy', text: 'Deployed main to production', time: 'just now' },
-      { type: 'ssl', text: 'SSL certificate auto-renewed', time: '14s ago' },
-      { type: 'node', text: 'New edge node online - Sao Paulo', time: '41s ago' },
-      { type: 'deploy', text: 'Cache purged after deploy', time: '1m ago' },
-      { type: 'node', text: 'Traffic rerouted around Tokyo node', time: '2m ago' },
-      { type: 'deploy', text: 'Build passed - 12 checks', time: '3m ago' },
+      { type: 'deploy', text: 'deploy main -> production: ok', time: 'just now' },
+      { type: 'ssl', text: 'ssl: certificate renewed', time: '14s ago' },
+      { type: 'node', text: 'edge: node online (sao-paulo)', time: '41s ago' },
+      { type: 'deploy', text: 'cache: purged after deploy', time: '1m ago' },
+      { type: 'node', text: 'route: reroute around tokyo', time: '2m ago' },
+      { type: 'deploy', text: 'build: passed, 12 checks ok', time: '3m ago' },
     ];
 
     function sendPacket(node) {
@@ -1611,20 +1815,22 @@
     }
 
     function addFeedItem(item) {
-      const rows = feed.querySelectorAll('.host-feed-item');
+      const lines = feed.querySelector('.host-feed-lines');
+      if (!lines) return;
+      const rows = lines.querySelectorAll('.host-feed-item');
       if (rows.length >= 4) rows[0].remove();
       const row = document.createElement('div');
       row.className = 'host-feed-item ' + item.type;
-      row.innerHTML = `
-        <span class="host-feed-dot"></span>
-        <span class="host-feed-text">${item.text}<span class="host-feed-time">${item.time}</span></span>
-      `;
-      feed.appendChild(row);
+      row.textContent = '$ ' + item.text;
+      lines.appendChild(row);
       requestAnimationFrame(() => row.classList.add('show'));
     }
 
     function playHostingLoop() {
-      feed.innerHTML = '';
+      feed.innerHTML = `
+        <div class="host-feed-head"><span></span><span></span><span></span><b>server.log</b></div>
+        <div class="host-feed-lines"></div>
+      `;
       uptimeEl.textContent = '0%';
       speedEl.textContent = String.fromCharCode(8212);
       nodesEl.textContent = '0';
@@ -1793,6 +1999,11 @@
     const wrap = document.querySelector('.site-frame-wrap');
     if (!cursor || !doc) return;
 
+    /* The whole Websites demo timeline shifted 2s earlier - every cursor
+       move/click in this function goes through runLater instead of the
+       shared later() so only this tab speeds up. */
+    const runLater = (fn, ms) => later(fn, Math.max(0, ms - 2000));
+
     let panY = 0;
     const panFrame = (px) => {
       panY = px;
@@ -1868,10 +2079,10 @@
     }
 
     function pickChoice(row, container, label, delay, cb) {
-      later(() => {
+      runLater(() => {
         const btn = [...row.querySelectorAll('button')].find(b => b.textContent === label);
         moveTo(btn);
-        later(() => {
+        runLater(() => {
           tap();
           row.remove();
           const echo = doc.createElement('p');
@@ -1879,7 +2090,7 @@
           echo.textContent = '\u2192 ' + label;
           container.appendChild(echo);
           scrollChatDown();
-          if (cb) later(cb, 900);
+          if (cb) runLater(cb, 900);
         }, 1100);
       }, delay);
     }
@@ -1974,9 +2185,9 @@
       const cardTop = card.getBoundingClientRect().top + target.scrollTop;
       const toY = Math.max(0, cardTop - target.clientHeight / 2 + card.clientHeight / 2);
       autoScroll(target, toY, 1500, () => {
-        later(() => {
+        runLater(() => {
           moveTo(btn);
-          later(() => {
+          runLater(() => {
             tap();
             card.querySelectorAll('.answer').forEach(b => {
               b.classList.toggle('is-chosen', Number(b.dataset.option) === item.correct);
@@ -1993,7 +2204,7 @@
             card.classList.add('is-revealed');
             const fill = doc.getElementById('progress-fill');
             if (fill) fill.style.width = Math.round(((i + 1) / QUIZ_DATA.length) * 100) + '%';
-            later(cb, 1300);
+            runLater(cb, 1300);
           }, 650);
         }, 300);
       });
@@ -2026,8 +2237,8 @@
     cursor.style.transform = `translate(${startOffX + 230}px, ${startOffY + 180}px)`;
     const guest = doc.getElementById('landing-guest');
 
-    later(() => moveTo(guest), 3000);
-    later(() => {
+    runLater(() => moveTo(guest), 3000);
+    runLater(() => {
       tap();
       show('screen-home');
       const input = doc.getElementById('chat-input');
@@ -2035,20 +2246,20 @@
       panToReveal(doc.getElementById('chat-form'));
     }, 4300);
 
-    later(() => moveTo(doc.getElementById('chat-input')), 5100);
-    later(() => tap(), 6000);
+    runLater(() => moveTo(doc.getElementById('chat-input')), 5100);
+    runLater(() => tap(), 6000);
 
-    later(() => {
+    runLater(() => {
       const input = doc.getElementById('chat-input');
       if (!input) return;
       QUESTION.split('').forEach((ch, i) => {
-        later(() => { input.value = QUESTION.slice(0, i + 1); }, i * 70);
+        runLater(() => { input.value = QUESTION.slice(0, i + 1); }, i * 70);
       });
     }, 6500);
 
     const typedDone = 6500 + QUESTION.length * 70 + 500;
-    later(() => moveTo(doc.querySelector('.chat-send')), typedDone);
-    later(() => {
+    runLater(() => moveTo(doc.querySelector('.chat-send')), typedDone);
+    runLater(() => {
       tap();
       const input = doc.getElementById('chat-input');
       addMessage('user', QUESTION);
@@ -2057,7 +2268,7 @@
     }, typedDone + 1100);
 
     function askDifficulty() {
-      later(() => {
+      runLater(() => {
         const bubble = addMessage('assistant', 'Building a quiz on that. How hard should it be?');
         const row = addChoices(bubble, [
           { label: 'Easy \u2014 mostly recall' },
@@ -2097,15 +2308,15 @@
 
     function writingQuiz() {
       addMessage('assistant', 'Writing your quiz...');
-      later(showReadyCard, 2000);
+      runLater(showReadyCard, 2000);
     }
 
     function showReadyCard() {
       const box = doc.getElementById('chat-messages');
       const { card, start } = addReadyCard(box, 6);
-      later(() => {
+      runLater(() => {
         moveTo(start);
-        later(() => {
+        runLater(() => {
           tap();
           card.remove();
           const ask = doc.createElement('p');
@@ -2122,7 +2333,7 @@
     }
 
     function showQuiz() {
-      later(() => {
+      runLater(() => {
         buildQuiz();
         show('screen-quiz');
         panFrame(0);
@@ -2130,13 +2341,13 @@
         if (fill) fill.style.width = '0%';
       }, 400);
 
-      later(() => {
+      runLater(() => {
         answerAllQuestions(doc, 0, () => {
           const target = (doc.scrollingElement || doc.documentElement || doc.body);
           autoScroll(target, 0, 1800, () => {
             cursor.style.opacity = '0';
-            later(() => { cursor.style.transform = `translate(${startOffX + 230}px, ${startOffY + 180}px)`; }, 200);
-            later(() => runDemo(doc, desktop), 2200);
+            runLater(() => { cursor.style.transform = `translate(${startOffX + 230}px, ${startOffY + 180}px)`; }, 200);
+            runLater(() => runDemo(doc, desktop), 2200);
           });
         });
       }, 1700);
