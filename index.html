@@ -2131,7 +2131,14 @@
   });
 
   let SCALE = 0.585;
-  const DESKTOP_SITE_WIDTH = 1100;
+  /* The real site's own chat column (.chat-shell) caps out at 800px even
+     in its desktop layout, so rendering the page any wider than that
+     (1100 previously) just adds dead white margin INSIDE the site on
+     both sides of the content, on top of whatever letterbox already
+     exists around the frame itself. Matching this width exactly means
+     the chat column fills 100% of what actually renders, instead of
+     floating in the middle of extra blank space it never needed. */
+  const DESKTOP_SITE_WIDTH = 800;
   function fitDesktopFrame(doc, frame, wrap) {
     /* Recomputed on every screen change, not just once at mount: the
        landing screen and the chat screen are different heights (the
