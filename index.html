@@ -1841,7 +1841,7 @@
       if (rows.length >= 4) rows[0].remove();
       const row = document.createElement('div');
       row.className = 'host-feed-item ' + item.type;
-      row.textContent = '$ ' + item.text;
+      row.textContent = item.text;
       lines.appendChild(row);
       requestAnimationFrame(() => row.classList.add('show'));
     }
