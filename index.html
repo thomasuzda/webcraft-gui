@@ -96,13 +96,13 @@
   }
   .tab-highlight{
     position:absolute;
-    top:5px; bottom:5px; left:5px;
-    width:0;
+    top:0; left:0;
+    width:0; height:0;
     border-radius:980px;
     background:rgba(92,157,255,0.18);
     border:1px solid var(--accent-line, rgba(92,157,255,0.45));
     box-shadow:0 0 0 1px rgba(92,157,255,0.2) inset;
-    transition:transform 0.4s cubic-bezier(0.34, 1.4, 0.4, 1), width 0.4s cubic-bezier(0.34, 1.4, 0.4, 1);
+    transition:transform 0.4s cubic-bezier(0.34, 1.4, 0.4, 1), width 0.4s cubic-bezier(0.34, 1.4, 0.4, 1), height 0.4s cubic-bezier(0.34, 1.4, 0.4, 1);
     pointer-events:none;
     z-index:0;
   }
@@ -1981,8 +1981,13 @@
 
   function positionHighlight(btn) {
     if (!btn || !tabHighlight) return;
-    tabHighlight.style.transform = `translateX(${btn.offsetLeft - 5}px)`;
+    /* Tabs wrap onto a second row on narrow screens (iPhone width), so
+       the highlight needs to track vertical position too, not just
+       slide left/right - otherwise it's stuck on row 1 when the active
+       tab wraps to row 2. */
+    tabHighlight.style.transform = `translate(${btn.offsetLeft - 5}px, ${btn.offsetTop - 5}px)`;
     tabHighlight.style.width = btn.offsetWidth + 'px';
+    tabHighlight.style.height = btn.offsetHeight + 'px';
   }
   window.addEventListener('resize', () => {
     const active = tabsEl.querySelector('.tab[aria-selected="true"]');
