@@ -2427,6 +2427,10 @@
 
     runLater(() => moveTo(doc.getElementById('chat-input')), 5100);
     runLater(() => tap(), 6000);
+    /* Lift the cursor above the input before typing starts - sitting on
+       top of the text row (the default center-of-element position) means
+       it covers the question as it's typed out. */
+    runLater(() => moveTo(doc.getElementById('chat-input'), 0, -22), 6250);
 
     runLater(() => {
       const input = doc.getElementById('chat-input');
