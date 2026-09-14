@@ -111,8 +111,8 @@
 
   .stage{
     position:relative;
-    width:min(760px, 94vw);
-    height:min(520px, 62vh);
+    width:min(960px, 94vw);
+    height:min(680px, 74vh);
     border-radius:18px;
     overflow:hidden;
     border:1px solid var(--border);
@@ -988,6 +988,11 @@
 
 
   @media (max-width: 620px){
+    /* Keep the phone-sized stage at its previous, already-tuned height —
+       the bigger desktop stage below is a desktop-only change. */
+    .stage{
+      height:min(520px, 62vh);
+    }
     .stage:has(.phone-row){
       height:1560px;
     }
@@ -1617,21 +1622,23 @@
       return { card, start };
     }
 
+    const QUIZ_DATA = [
+      { q: 'Which organelle is the site of aerobic respiration?', a: ['Ribosome', 'Mitochondrion', 'Golgi apparatus', 'Lysosome'], correct: 1, why: 'The mitochondrion\'s inner membrane is where the electron transport chain runs.' },
+      { q: 'What separates the cytoplasm from the outside environment?', a: ['Cell wall', 'Nuclear envelope', 'Plasma membrane', 'Cytoskeleton'], correct: 2, why: 'The plasma membrane is the selectively permeable boundary of the cell.' },
+      { q: 'Where are ribosomes assembled?', a: ['Nucleolus', 'Vacuole', 'Peroxisome', 'Centriole'], correct: 0, why: 'The nucleolus assembles ribosomal subunits before they exit the nucleus.' },
+      { q: 'Which structure packages and ships proteins?', a: ['Golgi apparatus', 'Peroxisome', 'Centriole', 'Vacuole'], correct: 0, why: 'The Golgi apparatus modifies, sorts, and packages proteins for delivery.' },
+      { q: 'What breaks down waste and worn-out organelles?', a: ['Ribosome', 'Chloroplast', 'Lysosome', 'Nucleolus'], correct: 2, why: 'Lysosomes contain digestive enzymes that break down cellular waste.' },
+      { q: "Where is the cell's genetic material stored?", a: ['Cytoplasm', 'Nucleus', 'Cell membrane', 'Vacuole'], correct: 1, why: 'DNA is housed in the nucleus, protected by the nuclear envelope.' },
+    ];
+
     function buildQuiz() {
       const list = doc.getElementById('questions');
       if (!list) return;
-      const data = [
-        { q: 'Which organelle is the site of aerobic respiration?', a: ['Ribosome', 'Mitochondrion', 'Golgi apparatus', 'Lysosome'] },
-        { q: 'What separates the cytoplasm from the outside environment?', a: ['Cell wall', 'Nuclear envelope', 'Plasma membrane', 'Cytoskeleton'] },
-        { q: 'Where are ribosomes assembled?', a: ['Nucleolus', 'Vacuole', 'Peroxisome', 'Centriole'] },
-        { q: 'Which structure packages and ships proteins?', a: ['Golgi apparatus', 'Peroxisome', 'Centriole', 'Vacuole'] },
-        { q: 'What breaks down waste and worn-out organelles?', a: ['Ribosome', 'Chloroplast', 'Lysosome', 'Nucleolus'] },
-        { q: "Where is the cell's genetic material stored?", a: ['Cytoplasm', 'Nucleus', 'Cell membrane', 'Vacuole'] },
-      ];
       list.innerHTML = '';
-      data.forEach((item, i) => {
+      QUIZ_DATA.forEach((item, i) => {
         const li = doc.createElement('li');
         li.className = 'qcard';
+        li.id = 'q-' + i;
         const num = doc.createElement('span');
         num.className = 'qcard__number';
         num.textContent = 'Question ' + (i + 1);
@@ -1644,6 +1651,8 @@
           const b = doc.createElement('button');
           b.className = 'answer';
           b.type = 'button';
+          b.dataset.question = String(i);
+          b.dataset.option = String(j);
           const letter = doc.createElement('span');
           letter.className = 'answer__letter';
           letter.textContent = 'ABCD'[j];
@@ -1653,11 +1662,60 @@
           b.append(letter, t);
           answers.appendChild(b);
         });
-        li.append(num, txt, answers);
+        const feedback = doc.createElement('div');
+        feedback.className = 'feedback';
+        feedback.hidden = true;
+        feedback.id = 'feedback-' + i;
+        const verdict = doc.createElement('p');
+        verdict.className = 'feedback__verdict';
+        const explanation = doc.createElement('p');
+        explanation.className = 'feedback__explanation';
+        feedback.append(verdict, explanation);
+        li.append(num, txt, answers, feedback);
         list.appendChild(li);
       });
       const counter = doc.getElementById('question-counter');
-      if (counter) counter.textContent = data.length + ' questions';
+      if (counter) counter.textContent = QUIZ_DATA.length + ' questions';
+    }
+
+    function answerQuestion(i, doc, cb) {
+      const item = QUIZ_DATA[i];
+      const card = doc.getElementById('q-' + i);
+      if (!card) { if (cb) cb(); return; }
+      const btn = card.querySelector('.answer[data-option="' + item.correct + '"]');
+
+      const target = (doc.scrollingElement || doc.documentElement || doc.body);
+      const cardTop = card.getBoundingClientRect().top + target.scrollTop;
+      const toY = Math.max(0, cardTop - target.clientHeight / 2 + card.clientHeight / 2);
+      autoScroll(target, toY, 1500, () => {
+        later(() => {
+          moveTo(btn);
+          later(() => {
+            tap();
+            card.querySelectorAll('.answer').forEach(b => {
+              b.classList.toggle('is-chosen', Number(b.dataset.option) === item.correct);
+              b.disabled = true;
+              if (Number(b.dataset.option) === item.correct) b.classList.add('is-correct');
+            });
+            const feedback = doc.getElementById('feedback-' + i);
+            if (feedback) {
+              feedback.querySelector('.feedback__verdict').textContent = 'Correct';
+              feedback.querySelector('.feedback__verdict').className = 'feedback__verdict feedback__verdict--correct';
+              feedback.querySelector('.feedback__explanation').textContent = item.why;
+              feedback.hidden = false;
+            }
+            card.classList.add('is-revealed');
+            const fill = doc.getElementById('progress-fill');
+            if (fill) fill.style.width = Math.round(((i + 1) / QUIZ_DATA.length) * 100) + '%';
+            later(cb, 1300);
+          }, 650);
+        }, 300);
+      });
+    }
+
+    function answerAllQuestions(doc, i, cb) {
+      if (i >= QUIZ_DATA.length) { if (cb) cb(); return; }
+      answerQuestion(i, doc, () => answerAllQuestions(doc, i + 1, cb));
     }
 
     function autoScroll(container, toY, duration, onDone) {
@@ -1782,22 +1840,18 @@
         panFrame(0);
         const fill = doc.getElementById('progress-fill');
         if (fill) fill.style.width = '0%';
-        cursor.style.opacity = '0';
       }, 400);
 
       later(() => {
-        const target = (doc.scrollingElement || doc.documentElement || doc.body);
-        const max = target.scrollHeight - target.clientHeight;
-        if (max > 0) autoScroll(target, max, 12000);
+        answerAllQuestions(doc, 0, () => {
+          const target = (doc.scrollingElement || doc.documentElement || doc.body);
+          autoScroll(target, 0, 1800, () => {
+            cursor.style.opacity = '0';
+            later(() => { cursor.style.transform = 'translate(230px, 180px)'; }, 200);
+            later(() => runDemo(doc), 2200);
+          });
+        });
       }, 1700);
-
-      later(() => {
-        const target = (doc.scrollingElement || doc.documentElement || doc.body);
-        autoScroll(target, 0, 2200, () => { cursor.style.opacity = '1'; });
-      }, 14300);
-
-      later(() => { cursor.style.transform = 'translate(230px, 180px)'; }, 16700);
-      later(() => runDemo(doc), 18700);
     }
   }
 
