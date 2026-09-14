@@ -1076,6 +1076,14 @@
     100%{ opacity:0; transform:scale(1.7); }
   }
 
+  @media (min-width: 621px){
+    /* The SEO stage is the same big shared box as the other tabs, but the
+       phones were still sized for the old small phone-sized box, leaving
+       a lot of empty space around them. Let them grow to fill it. */
+    .phone{
+      width:clamp(150px, 15vw, 240px);
+    }
+  }
 
   @media (max-width: 620px){
     /* Keep the phone-sized stage at its previous, already-tuned height -
@@ -1500,6 +1508,14 @@
     const q3 = document.getElementById('seoQ3');
     const pinMain = document.getElementById('seoPinMain'), mapCard = document.getElementById('seoMapCard');
 
+    /* Phones stacked vertically (mobile) type one at a time so only one
+       is ever "active" on a screen you can only see one of at a time.
+       Side-by-side (desktop) they're all visible together, so typing
+       them one after another just reads as slow - start them together. */
+    const sideBySide = window.innerWidth > 620;
+    const delay2 = sideBySide ? 300 : 1700;
+    const delay3 = sideBySide ? 300 : 3700;
+
     later(() => typeInto(q1, 'automotive company near me', () => {
       q1.classList.remove('q');
       r1.classList.add('show');
@@ -1521,13 +1537,13 @@
           later(() => r2.classList.add('show'), 700);
         }, 350);
       });
-    }, 1700);
+    }, delay2);
 
     later(() => typeInto(q3, 'automotive company', () => {
       q3.classList.remove('q');
       pinMain.classList.add('show');
       later(() => mapCard.classList.add('show'), 200);
-    }), 3700);
+    }), delay3);
   }
 
   function mountHosting() {
