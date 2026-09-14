@@ -681,10 +681,12 @@
   .host-stats{ display:flex; gap:22px; margin-bottom:14px; }
   .host-stat .num{ font-family:'Fraunces', Georgia, serif; font-size:1.4rem; font-variant-numeric:tabular-nums; }
   .host-stat .lbl{ font-size:0.6rem; color:rgba(255,255,255,0.55); text-transform:uppercase; letter-spacing:0.03em; }
+  .host-body{ display:flex; gap:12px; flex:1; min-height:0; }
   .host-map{
     position:relative;
-    flex:1;
+    flex:1.5;
     min-height:0;
+    min-width:0;
     border-radius:8px;
     background:rgba(255,255,255,0.05);
     overflow:hidden;
@@ -707,6 +709,55 @@
     0%{ opacity:0.8; transform:scale(0.5); }
     100%{ opacity:0; transform:scale(2.6); }
   }
+  .host-origin{
+    position:absolute;
+    width:7px; height:7px;
+    left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    border-radius:2px;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(255,255,255,0.14);
+  }
+  .host-packet{
+    position:absolute;
+    width:4px; height:4px;
+    left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 6px 2px rgba(139,227,168,0.85);
+    opacity:0;
+    transition:left 0.9s ease, top 0.9s ease, opacity 0.25s ease;
+    pointer-events:none;
+  }
+  .host-feed{
+    width:150px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    gap:9px;
+    overflow:hidden;
+  }
+  .host-feed-item{
+    display:flex;
+    gap:6px;
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+  .host-feed-item.show{ opacity:1; transform:none; }
+  .host-feed-dot{
+    width:6px; height:6px;
+    border-radius:50%;
+    margin-top:3px;
+    flex-shrink:0;
+  }
+  .host-feed-item.deploy .host-feed-dot{ background:#8be3a8; }
+  .host-feed-item.ssl .host-feed-dot{ background:#7fb2ff; }
+  .host-feed-item.node .host-feed-dot{ background:#d9a8ff; }
+  .host-feed-text{ font-size:0.63rem; line-height:1.35; color:rgba(255,255,255,0.9); }
+  .host-feed-time{ display:block; font-size:0.56rem; color:rgba(255,255,255,0.4); margin-top:1px; }
 
   /* ---- Support: AI chat + call ---- */
   .support-panel{
@@ -1250,7 +1301,10 @@
             <div class="host-stat"><div class="num" id="hostSpeed">&mdash;</div><div class="lbl">Response</div></div>
             <div class="host-stat"><div class="num" id="hostNodes">0</div><div class="lbl">CDN nodes</div></div>
           </div>
-          <div class="host-map" id="hostMap"></div>
+          <div class="host-body">
+            <div class="host-map" id="hostMap"></div>
+            <div class="host-feed" id="hostFeed"></div>
+          </div>
         </div>
       `,
       mount: mountHosting
@@ -1438,25 +1492,86 @@
     const speedEl = document.getElementById('hostSpeed');
     const nodesEl = document.getElementById('hostNodes');
     const map = document.getElementById('hostMap');
-    if (!map) return;
+    const feed = document.getElementById('hostFeed');
+    if (!map || !feed) return;
+
     const points = [[10,20],[28,55],[52,15],[70,60],[88,30],[46,75],[15,68],[80,80]];
-    map.innerHTML = points.map(([x,y]) => `<span class="host-node" style="left:${x}%;top:${y}%"></span>`).join('');
+    map.innerHTML = points.map(([x,y]) => `<span class="host-node" style="left:${x}%;top:${y}%"></span>`).join('')
+      + '<span class="host-origin"></span>';
     const nodes = [...map.querySelectorAll('.host-node')];
 
-    let uptime = 0;
-    const uptimeStep = () => {
-      uptime = Math.min(99.98, uptime + 12.5);
-      uptimeEl.textContent = uptime.toFixed(uptime >= 99 ? 2 : 0) + '%';
-      if (uptime < 99.98) later(uptimeStep, 90);
-    };
-    later(uptimeStep, 200);
-    later(() => { speedEl.textContent = '38ms'; }, 900);
-    later(() => { nodesEl.textContent = String(nodes.length); }, 1100);
+    const ACTIVITY = [
+      { type: 'deploy', text: 'Deployed main to production', time: 'just now' },
+      { type: 'ssl', text: 'SSL certificate auto-renewed', time: '14s ago' },
+      { type: 'node', text: 'New edge node online - Sao Paulo', time: '41s ago' },
+      { type: 'deploy', text: 'Cache purged after deploy', time: '1m ago' },
+      { type: 'node', text: 'Traffic rerouted around Tokyo node', time: '2m ago' },
+      { type: 'deploy', text: 'Build passed - 12 checks', time: '3m ago' },
+    ];
 
-    nodes.forEach((n, i) => {
-      later(() => n.classList.add('pulse'), 1300 + i * 220);
-    });
-    later(() => nodes.forEach(n => n.classList.remove('pulse')), 1300 + nodes.length * 220 + 1500);
+    function sendPacket(node) {
+      if (!node) return;
+      const packet = document.createElement('span');
+      packet.className = 'host-packet';
+      map.appendChild(packet);
+      requestAnimationFrame(() => {
+        packet.style.opacity = '1';
+        packet.style.left = node.style.left;
+        packet.style.top = node.style.top;
+      });
+      later(() => {
+        node.classList.add('pulse');
+        packet.style.opacity = '0';
+        later(() => { node.classList.remove('pulse'); packet.remove(); }, 1400);
+      }, 900);
+    }
+
+    function addFeedItem(item) {
+      const rows = feed.querySelectorAll('.host-feed-item');
+      if (rows.length >= 4) rows[0].remove();
+      const row = document.createElement('div');
+      row.className = 'host-feed-item ' + item.type;
+      row.innerHTML = `
+        <span class="host-feed-dot"></span>
+        <span class="host-feed-text">${item.text}<span class="host-feed-time">${item.time}</span></span>
+      `;
+      feed.appendChild(row);
+      requestAnimationFrame(() => row.classList.add('show'));
+    }
+
+    function playHostingLoop() {
+      feed.innerHTML = '';
+      uptimeEl.textContent = '0%';
+      speedEl.textContent = String.fromCharCode(8212);
+      nodesEl.textContent = '0';
+
+      let uptime = 0;
+      const uptimeStep = () => {
+        uptime = Math.min(99.98, uptime + 12.5);
+        uptimeEl.textContent = uptime.toFixed(uptime >= 99 ? 2 : 0) + '%';
+        if (uptime < 99.98) later(uptimeStep, 90);
+      };
+      later(uptimeStep, 200);
+      later(() => { speedEl.textContent = '38ms'; }, 900);
+      later(() => { nodesEl.textContent = String(nodes.length); }, 1100);
+
+      let t = 1300;
+      points.forEach((_, i) => {
+        later(() => sendPacket(nodes[i]), t);
+        t += 480;
+      });
+
+      let feedStart = 1600;
+      ACTIVITY.forEach((item) => {
+        later(() => addFeedItem(item), feedStart);
+        feedStart += 1300;
+      });
+
+      const total = Math.max(t + 1500, feedStart + 800);
+      later(() => playHostingLoop(), total);
+    }
+
+    playHostingLoop();
   }
 
   function mountSupport() {
