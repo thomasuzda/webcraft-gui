@@ -118,16 +118,6 @@
     border:1px solid var(--border);
     background:var(--bg);
   }
-  /* The real site is a tall page (roughly 480x760) — fitting it whole
-     inside the wide box every other tab uses leaves big empty margins on
-     the sides. Shaping this one tab's box to the page's own proportions
-     instead fills it edge to edge with nothing letterboxed. */
-  @media (min-width: 621px){
-    .stage:has(.site-preview){
-      width:min(540px, 60vw);
-      height:min(820px, 88vh);
-    }
-  }
   .stage-flow{
     position:absolute;
     inset:-40% -20%;
