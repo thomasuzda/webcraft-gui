@@ -503,9 +503,18 @@
     padding:5px 9px 7px;
     font-size:6.1cqw; font-weight:700; color:#111;
   }
-  .gpt-brand{ display:flex; align-items:center; gap:5px; }
-  .gpt-brand svg{ flex-shrink:0; width:15cqw; height:15cqw; }
-  .gpt-brand .chev{ font-size:0.85em; color:#8e8e93; font-weight:600; }
+  .gpt-menu{ flex-shrink:0; }
+  .gpt-brand-pill{
+    display:flex; align-items:center; gap:5px;
+    border:1px solid #e3e3e3;
+    border-radius:100px;
+    padding:4px 10px;
+    font-size:5cqw;
+    font-weight:600;
+  }
+  .gpt-brand-pill svg{ flex-shrink:0; }
+  .gpt-bar-icons{ display:flex; align-items:center; gap:11px; }
+  .gpt-bar-icons svg{ flex-shrink:0; }
   .phone-gpt-body{ flex:1; padding:0 9px; display:flex; flex-direction:column; gap:6px; overflow:hidden; }
   .phone-bubble{
     max-width:84%;
@@ -531,6 +540,15 @@
     color:#8e8e93;
   }
   .phone-gpt-input .q::after{ content:''; display:inline-block; width:1px; height:7px; background:#1e1e1e; margin-left:1px; animation:phoneCaret 1s step-end infinite; }
+  .gpt-input-icons{ display:flex; align-items:center; gap:9px; flex-shrink:0; }
+  .gpt-input-icons svg{ flex-shrink:0; }
+  .gpt-send{
+    width:20px; height:20px;
+    border-radius:50%;
+    background:#d1d1d1;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
 
   /* Maps phone */
   .phone-maps-search{
@@ -1205,11 +1223,16 @@
           <div class="phone"><div class="phone-screen">
             ${statusBar()}
             <div class="phone-gpt-bar">
-              <span class="gpt-brand">
-                <svg viewBox="0 0 24 24" width="15" height="15" fill="#0f0f0f"><path d="M22.28 9.82a5.98 5.98 0 0 0-.52-4.91 6.05 6.05 0 0 0-6.51-2.9A6 6 0 0 0 4.98 4.18a5.98 5.98 0 0 0-4 2.9 6.05 6.05 0 0 0 .74 7.09 5.98 5.98 0 0 0 .51 4.91 6.05 6.05 0 0 0 6.52 2.9A6 6 0 0 0 19.02 19.8a5.98 5.98 0 0 0 4-2.9 6.06 6.06 0 0 0-.74-7.08zM13.73 21.4a4.48 4.48 0 0 1-2.87-1.04l.14-.08 4.77-2.75a.78.78 0 0 0 .39-.68v-6.73l2.02 1.17.04.05v5.56a4.5 4.5 0 0 1-4.49 4.5zM3.87 17.44a4.46 4.46 0 0 1-.53-3.01l.14.09 4.77 2.75a.77.77 0 0 0 .78 0l5.83-3.37v2.33l-.03.06-4.82 2.78a4.5 4.5 0 0 1-6.14-1.63zM2.6 7.85a4.48 4.48 0 0 1 2.35-1.97v5.67c0 .28.15.53.39.67l5.83 3.37-2.02 1.17-.07 0L4.11 14A4.5 4.5 0 0 1 2.6 7.85zm16.6 3.86-5.83-3.37 2.02-1.17.07 0 4.98 2.87a4.5 4.5 0 0 1-.68 8.11v-5.67a.77.77 0 0 0-.39-.67zm2-3.02-.14-.09-4.77-2.75a.78.78 0 0 0-.78 0L9.85 9.22V6.89l.03-.06 4.82-2.78a4.5 4.5 0 0 1 6.67 4.66zM8.68 12.86l-2.02-1.17-.04-.05V6.08a4.5 4.5 0 0 1 7.38-3.45l-.14.08L9.09 5.46a.78.78 0 0 0-.39.68zm1.1-2.37 2.6-1.5 2.6 1.5v3l-2.6 1.5-2.6-1.5z"/></svg>
-                ChatGPT <span class="chev">&#8964;</span>
+              <svg class="gpt-menu" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+              <span class="gpt-brand-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.1 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.1-4-9s1.5-6.3 4-9z"/></svg>
+                GPT
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
               </span>
-              <span>&#128196; &#9998;&#65039;</span>
+              <span class="gpt-bar-icons">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/></svg>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </span>
             </div>
             <div class="phone-gpt-body">
               <div class="phone-bubble user" id="seoQ2"></div>
@@ -1222,7 +1245,13 @@
                 </ol>
               </div>
             </div>
-            <div class="phone-gpt-input"><span id="seoGptPlaceholder">Message</span><span>&#8593;</span></div>
+            <div class="phone-gpt-input">
+              <span id="seoGptPlaceholder">Message</span>
+              <span class="gpt-input-icons">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                <span class="gpt-send"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></span>
+              </span>
+            </div>
           </div></div>
           <div class="phone"><div class="phone-screen">
             ${statusBar()}
