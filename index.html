@@ -7,7 +7,7 @@
 </head>
 <body>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Poppins:wght@500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Poppins:wght@500;600&family=Fredoka:wght@500;600&display=swap');
 
   :root{
     --black:#08090c;
@@ -402,7 +402,7 @@
     display:flex; align-items:center; justify-content:center;
     box-shadow:0 0 0 1px rgba(255,255,255,0.6);
   }
-  .phone-app-bar .g-logo{ font-family:'Poppins', sans-serif; font-size:9.4cqw; font-weight:600; letter-spacing:0; }
+  .phone-app-bar .g-logo{ font-family:'Fredoka', sans-serif; font-size:9.4cqw; font-weight:600; letter-spacing:-0.01em; }
   .phone-app-bar .g-logo b:nth-child(1){ color:#4285f4; }
   .phone-app-bar .g-logo b:nth-child(2){ color:#ea4335; }
   .phone-app-bar .g-logo b:nth-child(3){ color:#fbbc05; }
@@ -413,7 +413,7 @@
   .phone-searchbar{
     display:flex;
     align-items:center;
-    gap:5px;
+    gap:6px;
     margin:0 9px;
     padding:5px 9px;
     border-radius:100px;
@@ -421,6 +421,7 @@
     font-size:6.7cqw;
     color:#3c4043;
   }
+  .phone-searchbar svg{ flex-shrink:0; }
   .phone-searchbar .q::after{ content:''; display:inline-block; width:1px; height:7px; background:#3c4043; margin-left:1px; animation:phoneCaret 1s step-end infinite; }
   @keyframes phoneCaret{ 50%{ opacity:0; } }
   .phone-tabs{
@@ -487,12 +488,14 @@
   .r-rating{ font-size:4.2cqw; margin-bottom:6px; }
   .r-actions{ display:flex; gap:8px; padding-bottom:8px; }
   .r-actions span{
-    flex:1; text-align:center;
+    flex:1;
+    display:flex; align-items:center; justify-content:center; gap:4px;
     font-size:4.4cqw; font-weight:600; color:#1a73e8;
     border:1px solid #dadce0;
     border-radius:100px;
     padding:5px 0;
   }
+  .r-actions svg{ flex-shrink:0; }
 
   /* ChatGPT phone */
   .phone-gpt-bar{
@@ -589,9 +592,10 @@
   .maps-brand{
     position:absolute;
     left:6px; bottom:5px;
+    font-family:'Fredoka', sans-serif;
     font-size:4.8cqw;
-    font-weight:700;
-    letter-spacing:-0.02em;
+    font-weight:600;
+    letter-spacing:-0.01em;
     text-shadow:0 1px 2px rgba(255,255,255,0.7);
   }
   .maps-brand b:nth-child(1){ color:#4285f4; }
@@ -1161,7 +1165,7 @@
               <span class="g-logo"><b>G</b><b>o</b><b>o</b><b>g</b><b>l</b><b>e</b></span>
               <span class="g-avatar">S</span>
             </div>
-            <div class="phone-searchbar">&#128269;<span class="q" id="seoQ1"></span></div>
+            <div class="phone-searchbar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5f6368" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="20" y1="20" x2="15.3" y2="15.3"/></svg><span class="q" id="seoQ1"></span></div>
             <div class="phone-tabs"><span class="on">All</span><span>Maps</span><span>News</span><span>Images</span><span>Shopping</span></div>
             <div class="phone-result" id="seoR1">
               <div class="phone-section-label">Places</div>
@@ -1191,7 +1195,10 @@
                 <div class="r-title">Tom's Automotive | Trusted Auto Repair &amp; Service</div>
                 <div class="r-snippet">Tom's Automotive | Trusted Auto Repair &amp; Service is stress-free with our expert, and&hellip;</div>
                 <div class="r-rating"><span class="l-star">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <span class="l-meta">4.8 (184)</span></div>
-                <div class="r-actions"><span>&#9742; Phone</span><span>&#8599; Directions</span></div>
+                <div class="r-actions">
+                  <span><svg width="11" height="11" viewBox="0 0 24 24" fill="#1a73e8"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>Phone</span>
+                  <span><svg width="12" height="12" viewBox="0 0 24 24" fill="#1a73e8"><path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM14 14.5V12h-3v3H9v-4a1 1 0 011-1h4V7.5l3.5 3.5z"/></svg>Directions</span>
+                </div>
               </div>
             </div>
           </div></div>
