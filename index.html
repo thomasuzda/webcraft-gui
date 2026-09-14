@@ -41,14 +41,21 @@
   body::before{
     content:"";
     position:fixed;
-    inset:0;
+    inset:-10%;
     z-index:0;
     background:
       radial-gradient(ellipse 95% 65% at 50% 0%, rgba(190,198,212,0.16), transparent 74%),
       radial-gradient(ellipse 66% 52% at 58% 2%, rgba(92,157,255,0.16), transparent 72%),
       var(--black);
+    animation:heroDrift 18s ease-in-out infinite;
+    transform-origin:50% 0%;
+  }
+  @keyframes heroDrift{
+    0%, 100%{ transform:scale(1) translate(0, 0); opacity:1; }
+    50%{ transform:scale(1.06) translate(-1.5%, 1%); opacity:0.9; }
   }
   body > *{ position:relative; z-index:1; }
+  @media (prefers-reduced-motion: reduce){ body::before{ animation:none; } }
 
   .heading{
     text-align:center;
@@ -75,6 +82,7 @@
   }
 
   .tabs{
+    position:relative;
     display:flex;
     gap:2px;
     background:rgba(255,255,255,0.05);
@@ -86,7 +94,21 @@
     flex-wrap:wrap;
     justify-content:center;
   }
+  .tab-highlight{
+    position:absolute;
+    top:5px; bottom:5px; left:5px;
+    width:0;
+    border-radius:980px;
+    background:rgba(92,157,255,0.18);
+    border:1px solid var(--accent-line, rgba(92,157,255,0.45));
+    box-shadow:0 0 0 1px rgba(92,157,255,0.2) inset;
+    transition:transform 0.4s cubic-bezier(0.34, 1.4, 0.4, 1), width 0.4s cubic-bezier(0.34, 1.4, 0.4, 1);
+    pointer-events:none;
+    z-index:0;
+  }
   .tab{
+    position:relative;
+    z-index:1;
     font:inherit;
     font-size:0.82rem;
     font-weight:700;
@@ -97,15 +119,13 @@
     border-radius:980px;
     cursor:pointer;
     white-space:nowrap;
-    transition:background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition:background 0.2s ease, color 0.2s ease, transform 0.15s ease;
   }
-  .tab:hover{ color:#fff; background:rgba(92,157,255,0.14); }
-  .tab[aria-selected="true"]{
-    background:rgba(92,157,255,0.18);
-    border:1px solid var(--accent-line, rgba(92,157,255,0.45));
-    color:#fff;
-    box-shadow:0 0 0 1px rgba(92,157,255,0.2) inset;
-  }
+  .tab:hover{ color:#fff; background:rgba(255,255,255,0.06); }
+  .tab:active{ transform:scale(0.93); }
+  .tab[aria-selected="true"]{ color:#fff; }
+  .tab[aria-selected="true"]:hover{ background:transparent; }
+  @media (prefers-reduced-motion: reduce){ .tab-highlight{ transition:none; } }
 
   .stage{
     position:relative;
@@ -1199,7 +1219,7 @@
   <span class="eyebrow">Web<b>craft</b></span>
 </div>
 
-<div class="tabs" role="tablist" id="tabs"></div>
+<div class="tabs" role="tablist" id="tabs"><span class="tab-highlight" id="tabHighlight"></span></div>
 <div class="stage">
   <div class="stage-flow"></div>
   <div class="card" id="card"></div>
@@ -1947,6 +1967,7 @@
 
   const tabsEl = document.getElementById('tabs');
   const cardEl = document.getElementById('card');
+  const tabHighlight = document.getElementById('tabHighlight');
 
   tabs.forEach((t, i) => {
     const btn = document.createElement('button');
@@ -1956,6 +1977,23 @@
     btn.textContent = t.label;
     btn.addEventListener('click', () => render(i));
     tabsEl.appendChild(btn);
+  });
+
+  function positionHighlight(btn) {
+    if (!btn || !tabHighlight) return;
+    tabHighlight.style.transform = `translateX(${btn.offsetLeft - 5}px)`;
+    tabHighlight.style.width = btn.offsetWidth + 'px';
+  }
+  window.addEventListener('resize', () => {
+    const active = tabsEl.querySelector('.tab[aria-selected="true"]');
+    if (active) positionHighlight(active);
+  });
+  /* Re-measure once the webfont has swapped in - button widths can shift
+     slightly from the fallback font, which would leave the highlight
+     pill a few px off until the next tab click. */
+  window.addEventListener('load', () => {
+    const active = tabsEl.querySelector('.tab[aria-selected="true"]');
+    if (active) positionHighlight(active);
   });
 
   let SCALE = 0.585;
@@ -2393,7 +2431,9 @@
   }
 
   function render(i) {
-    [...tabsEl.children].forEach((btn, idx) => btn.setAttribute('aria-selected', idx === i ? 'true' : 'false'));
+    const tabButtons = [...tabsEl.querySelectorAll('.tab')];
+    tabButtons.forEach((btn, idx) => btn.setAttribute('aria-selected', idx === i ? 'true' : 'false'));
+    positionHighlight(tabButtons[i]);
     cardEl.classList.add('swap');
     stopDemo();
     setTimeout(() => {
