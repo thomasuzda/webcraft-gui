@@ -1514,16 +1514,16 @@
       SCRIPT.forEach((m) => {
         if (m.who === 'ai') {
           later(() => typeRow(), t);
-          t += 900;
+          t += 1600;
           later(() => {
             const typing = chat.querySelector('.support-msg.typing');
             if (typing) typing.closest('.support-row').remove();
             addRow(m);
           }, t);
-          t += 700;
+          t += 1300;
         } else {
           later(() => addRow(m), t);
-          t += 1000;
+          t += 1800;
         }
       });
       later(() => {
