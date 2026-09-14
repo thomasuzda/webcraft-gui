@@ -118,6 +118,16 @@
     border:1px solid var(--border);
     background:var(--bg);
   }
+  /* The real site is a tall page (roughly 480x760) — fitting it whole
+     inside the wide box every other tab uses leaves big empty margins on
+     the sides. Shaping this one tab's box to the page's own proportions
+     instead fills it edge to edge with nothing letterboxed. */
+  @media (min-width: 621px){
+    .stage:has(.site-preview){
+      width:min(540px, 60vw);
+      height:min(820px, 88vh);
+    }
+  }
   .stage-flow{
     position:absolute;
     inset:-40% -20%;
@@ -1873,7 +1883,7 @@
            on the narrow axis. Mobile keeps the old "cover" scaling (fills
            the box width, taller than it, needs panning) untouched, since
            it's already tuned and the user asked not to touch it. */
-        desktop = wrap.clientWidth > 620;
+        desktop = window.innerWidth > 620;
         if (desktop) {
           SCALE = Math.min(wrap.clientWidth / 480, wrap.clientHeight / 760);
           f.style.left = Math.round((wrap.clientWidth - 480 * SCALE) / 2) + 'px';
