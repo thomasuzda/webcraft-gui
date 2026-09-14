@@ -1499,6 +1499,7 @@
   });
 
   let SCALE = 0.585;
+  const DESKTOP_SITE_WIDTH = 1100;
   function fitDesktopFrame(doc, frame, wrap) {
     /* Recomputed on every screen change, not just once at mount: the
        landing screen and the chat screen are different heights (the
@@ -1506,8 +1507,15 @@
        fixed "page height" guess leaves later screens cropped or puts
        the cursor below the visible box. Measuring the CURRENTLY VISIBLE
        screen's real height keeps everything (and the cursor) inside
-       the box no matter which screen is showing. */
-    const w = 480;
+       the box no matter which screen is showing.
+
+       The frame itself is rendered at a DESKTOP width (not the 480px
+       mobile width mobile uses), so the real site's own desktop CSS
+       (max-width:600px mobile rules don't apply above 600px) lays out
+       like an actual website instead of a phone column floating in a
+       wide box - then we zoom the whole thing out to fit. */
+    const w = DESKTOP_SITE_WIDTH;
+    if (frame.style.width !== w + 'px') frame.style.width = w + 'px';
     const h = Math.max(doc.body.scrollHeight, 400);
     SCALE = Math.min(wrap.clientWidth / w, wrap.clientHeight / h);
     frame.style.left = Math.round((wrap.clientWidth - w * SCALE) / 2) + 'px';
@@ -1895,6 +1903,7 @@
         if (desktop) {
           fitDesktopFrame(doc, f, wrap);
         } else {
+          f.style.width = '480px';
           SCALE = wrap.clientWidth / 480;
           f.style.left = '0px';
           f.style.top = '0px';
