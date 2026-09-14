@@ -1499,6 +1499,21 @@
   });
 
   let SCALE = 0.585;
+  function fitDesktopFrame(doc, frame, wrap) {
+    /* Recomputed on every screen change, not just once at mount: the
+       landing screen and the chat screen are different heights (the
+       chat screen grows as messages/quiz cards stack up), so a single
+       fixed "page height" guess leaves later screens cropped or puts
+       the cursor below the visible box. Measuring the CURRENTLY VISIBLE
+       screen's real height keeps everything (and the cursor) inside
+       the box no matter which screen is showing. */
+    const w = 480;
+    const h = Math.max(doc.body.scrollHeight, 400);
+    SCALE = Math.min(wrap.clientWidth / w, wrap.clientHeight / h);
+    frame.style.left = Math.round((wrap.clientWidth - w * SCALE) / 2) + 'px';
+    frame.style.top = Math.round((wrap.clientHeight - h * SCALE) / 2) + 'px';
+    frame.style.transform = `scale(${SCALE})`;
+  }
   let demoTimers = [];
   function later(fn, ms) { demoTimers.push(setTimeout(fn, ms)); }
   function stopDemo() { demoTimers.forEach(clearTimeout); demoTimers = []; }
@@ -1533,6 +1548,7 @@
       doc.querySelectorAll('.screen').forEach(s => s.classList.remove('demo-on'));
       const el = doc.getElementById(id);
       if (el) { el.removeAttribute('hidden'); el.classList.add('demo-on'); }
+      if (desktop && frame && wrap) fitDesktopFrame(doc, frame, wrap);
     };
     const moveTo = (el, dx = 0, dy = 0) => {
       if (!el || !frame) return;
@@ -1877,15 +1893,13 @@
            it's already tuned and the user asked not to touch it. */
         desktop = window.innerWidth > 620;
         if (desktop) {
-          SCALE = Math.min(wrap.clientWidth / 480, wrap.clientHeight / 760);
-          f.style.left = Math.round((wrap.clientWidth - 480 * SCALE) / 2) + 'px';
-          f.style.top = Math.round((wrap.clientHeight - 760 * SCALE) / 2) + 'px';
+          fitDesktopFrame(doc, f, wrap);
         } else {
           SCALE = wrap.clientWidth / 480;
           f.style.left = '0px';
           f.style.top = '0px';
+          f.style.transform = `scale(${SCALE})`;
         }
-        f.style.transform = `scale(${SCALE})`;
       }
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         doc.querySelectorAll('.screen').forEach(s => s.classList.remove('demo-on'));
