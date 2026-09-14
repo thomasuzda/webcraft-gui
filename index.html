@@ -1737,7 +1737,9 @@
     // ---- sequence ----
     show('screen-landing');
     panFrame(0);
-    cursor.style.transform = 'translate(230px, 180px)';
+    const startOffX = (frame && parseFloat(frame.style.left)) || 0;
+    const startOffY = (frame && parseFloat(frame.style.top)) || 0;
+    cursor.style.transform = `translate(${startOffX + 230}px, ${startOffY + 180}px)`;
     const guest = doc.getElementById('landing-guest');
 
     later(() => moveTo(guest), 3000);
@@ -1849,7 +1851,7 @@
           const target = (doc.scrollingElement || doc.documentElement || doc.body);
           autoScroll(target, 0, 1800, () => {
             cursor.style.opacity = '0';
-            later(() => { cursor.style.transform = 'translate(230px, 180px)'; }, 200);
+            later(() => { cursor.style.transform = `translate(${startOffX + 230}px, ${startOffY + 180}px)`; }, 200);
             later(() => runDemo(doc, desktop), 2200);
           });
         });
